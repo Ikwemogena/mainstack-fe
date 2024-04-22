@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
@@ -103,5 +103,19 @@ a {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+} */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+
+  ul {
+    display: flex;
+    gap: 1rem;
+    li {
+      text-decoration: none;
+    }
   }
 }
