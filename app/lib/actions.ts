@@ -1,10 +1,10 @@
 
-const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
-
+const baseUrl = process.env.BASE_URL;
 export async function getUser() {
     try {
         const response = await fetch(`${baseUrl}/user`);
         return response.json();
+
     } catch (error) {
         return { error };
     }
@@ -13,7 +13,7 @@ export async function getUser() {
 
 export async function getWallet() {
     try {
-        const response = await fetch(`${baseUrl}/wallet`);
+        const response = await fetch(`https://fe-task-api.mainstack.io/wallet`);
         return response.json();
     } catch (error) {
         return { error };
@@ -22,7 +22,7 @@ export async function getWallet() {
 
 export async function getTransactions() {
     try {
-        const response = await fetch(`${baseUrl}/transactions`);
+        const response = await fetch(`https://fe-task-api.mainstack.io/transactions`);
         return response.json();
     } catch (error) {
         return { error };
