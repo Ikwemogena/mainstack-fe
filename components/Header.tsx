@@ -3,11 +3,14 @@
 import Image from "next/image";
 import Link from 'next/link'
 import { usePathname } from "next/navigation";
+import { Box, useToast } from '@chakra-ui/react'
+
 export default function Header() {
     const currentPath = usePathname();
+    const toast = useToast();
     return (
-        <div className="header__container">
-            <div className="header">
+        <Box className="header__container">
+            <Box className="header">
                 <Image
                     src="/assets/mainstack-logo.svg"
                     alt="Mainstack Logo"
@@ -18,7 +21,7 @@ export default function Header() {
                 <nav className="header__nav">
                     <ul className="header__nav-list">
                         <li>
-                            <Link href="/">
+                            <Link href="/" className={currentPath === '/' ? 'active' : ''}>
                                 <Image
                                     src="/assets/icons/home-icon.svg"
                                     alt="Mainstack Logo"
@@ -36,7 +39,7 @@ export default function Header() {
                             height={20}
                             priority
                         />Analytics</Link></li>
-                        <li><Link href="/" className={currentPath === '/' ? 'active' : ''}>
+                        <li><Link href="/revenue" className={currentPath === '/revenue' ? 'active' : ''}>
                             <Image
                                 src="/assets/icons/payments-icon.svg"
                                 alt="Revenue Icon"
@@ -61,8 +64,8 @@ export default function Header() {
                     </ul>
                 </nav>
 
-                <div className="header__actions">
-                    <div className="action-container">
+                <Box className="header__actions">
+                    <Box className="action-container">
                         <Image
                             src="/assets/icons/notification-icon.svg"
                             alt="Mainstack Logo"
@@ -70,8 +73,8 @@ export default function Header() {
                             height={20}
                             priority
                         />
-                    </div>
-                    <div className="action-container">
+                    </Box>
+                    <Box className="action-container">
                         <Image
                             src="/assets/icons/chat-icon.svg"
                             alt="Mainstack Logo"
@@ -79,8 +82,15 @@ export default function Header() {
                             height={20}
                             priority
                         />
-                    </div>
-                    <div className="header__actions-menu">
+                    </Box>
+                    <Box className="header__actions-menu" onClick={() =>
+                        toast({
+                            title: 'No Action.',
+                            status: 'success',
+                            duration: 3000,
+                            // isClosable: true,
+                        })
+                    }>
                         <p className="header__actions-menu-profile">OJ</p>
                         <Image
                             src="/assets/icons/menu-icon.svg"
@@ -89,9 +99,9 @@ export default function Header() {
                             height={25}
                             priority
                         />
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
     )
 }
