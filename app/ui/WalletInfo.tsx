@@ -4,6 +4,7 @@ import { getWallet } from "../lib/actions";
 import type { Wallet } from "../lib/definitions";
 import { useEffect, useState } from "react";
 import { formatCurrency } from "@/utils/number";
+import { Box, Spinner, Text } from "@chakra-ui/react";
 
 export function Wallet() {
     const [balances, setBalances] = useState<Wallet>();
@@ -16,13 +17,13 @@ export function Wallet() {
     }, [])
     // const balances = await getWallet();
     // console.log(balances)
-    if (!balances) return;
+    if (!balances) return (<Spinner />);
     return (
-        <div className="transactions-summary">
-            <div className="transactions-summary__item">
-                <div className="transactions-summary__item-title">
-                    <p>Ledger Balance</p>
-                    <div>
+        <Box className="transactions-summary">
+            <Box className="transactions-summary__item">
+                <Box className="transactions-summary__item-title">
+                    <Text>Ledger Balance</Text>
+                    <Box>
                         <Image
                             src="/assets/icons/info-icon.svg"
                             alt="Mainstack Logo"
@@ -30,15 +31,15 @@ export function Wallet() {
                             height={20}
                             priority
                         />
-                    </div>
-                </div>
-                <p className="transactions-summary__item-value">{formatCurrency(balances?.balance)}</p>
-            </div>
+                    </Box>
+                </Box>
+                <Text className="transactions-summary__item-value">{formatCurrency(balances?.balance)}</Text>
+            </Box>
 
-            <div className="transactions-summary__item">
-                <div className="transactions-summary__item-title">
+            <Box className="transactions-summary__item">
+                <Box className="transactions-summary__item-title">
                     <p>Total Payout</p>
-                    <div>
+                    <Box>
                         <Image
                             src="/assets/icons/info-icon.svg"
                             alt="Mainstack Logo"
@@ -46,15 +47,15 @@ export function Wallet() {
                             height={20}
                             priority
                         />
-                    </div>
-                </div>
+                    </Box>
+                </Box>
                 <p className="transactions-summary__item-value">{formatCurrency(balances.total_payout)}</p>
-            </div>
+            </Box>
 
-            <div className="transactions-summary__item">
-                <div className="transactions-summary__item-title">
+            <Box className="transactions-summary__item">
+                <Box className="transactions-summary__item-title">
                     <p>Total Revenue</p>
-                    <div>
+                    <Box>
                         <Image
                             src="/assets/icons/info-icon.svg"
                             alt="Mainstack Logo"
@@ -62,16 +63,16 @@ export function Wallet() {
                             height={20}
                             priority
                         />
-                    </div>
-                </div>
+                    </Box>
+                </Box>
                 <p className="transactions-summary__item-value">{formatCurrency(balances?.total_revenue)}</p>
-            </div>
+            </Box>
 
-            <div className="transactions-summary__item">
-                <div>
-                    <div className="transactions-summary__item-title">
+            <Box className="transactions-summary__item">
+                <Box>
+                    <Box className="transactions-summary__item-title">
                         <p>Pending Payout</p>
-                        <div>
+                        <Box>
                             <Image
                                 src="/assets/icons/info-icon.svg"
                                 alt="Mainstack Logo"
@@ -79,11 +80,11 @@ export function Wallet() {
                                 height={20}
                                 priority
                             />
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                     <p className="transactions-summary__item-value">{formatCurrency(balances?.pending_payout)}</p>
-                </div>
-            </div>
-        </div>
+                </Box>
+            </Box>
+        </Box>
     )
 }
