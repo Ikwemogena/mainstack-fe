@@ -86,7 +86,7 @@ export default function Header() {
                     <Box className="header__actions-menu" onClick={() =>
                         toast({
                             title: 'No Action.',
-                            status: 'success',
+                            status: 'warning',
                             duration: 3000,
                             // isClosable: true,
                         })
