@@ -1,11 +1,15 @@
 'use client'
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import flatpickr from "flatpickr";
+import DatePicker from "./DatePicker";
 
 export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>(['successful', 'pending', 'failed']);
 
     const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(['store transactions', 'get tipped', 'withdrawals']);
+
+    const [showFilters, setShowFilters] = useState(false);
 
     const handleTransactionTypeChange = (option: string) => {
         if (selectedTransactionTypes.includes(option)) {
@@ -27,6 +31,7 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
+            setTimeout(() => setShowFilters(true), 100);
         } else {
             document.body.style.overflow = "auto";
         }
@@ -35,10 +40,18 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
         };
     }, [isOpen]);
 
-    return ( 
+    const closeFilters = () => {
+        setShowFilters(false)
+        setTimeout(() => onClose(), 300);
+    }
+
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+
+    return (
         <>
-            {isOpen && <div className="backdrop" onClick={onClose}></div>}
-            <div className='filter__modal slide-in'>
+            {isOpen && <div className="backdrop" onClick={closeFilters}></div>}
+            {isOpen && <div className={`filter__modal ${showFilters ? ' test' : 'test-out'}`}>
                 <div>
                     <div className="filter__modal-header">
                         <h3>Filter</h3>
@@ -48,7 +61,7 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
                             width={34}
                             height={34}
                             priority
-                            onClick={() => onClose()}
+                            onClick={() => closeFilters()}
                         />
                     </div>
                     <div className="filter__modal-body">
@@ -62,6 +75,7 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
                             <div className="filter__container__item">
                                 <p>Date Range</p>
                                 <div className="filter__container__item__options">
+                                    {/* <DatePicker onChange={setSelectedDate} /> */}
                                     <select name="" id="">
                                         <option value="All"><input type="checkbox" /> All</option>
                                         <option value="Received">Received</option>
@@ -100,9 +114,9 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
                 </div>
                 <div className="filter__modal-footer">
                     <button className="filter-clear">Clear</button>
-                    <button className="filter-apply" onClick={() => onClose()}>Apply</button>
+                    <button className="filter-apply" onClick={() => closeFilters()}>Apply</button>
                 </div>
-            </div>
+            </div>}
         </>
     )
 }
