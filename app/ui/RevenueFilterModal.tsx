@@ -3,13 +3,17 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import flatpickr from "flatpickr";
 import DatePicker from "./DatePicker";
+import { Text } from "@chakra-ui/react";
 
 export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>(['successful', 'pending', 'failed']);
 
-    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(['store transactions', 'get tipped', 'withdrawals']);
+    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(['store transactions', 'get tipped', 'withdrawals', 'chargebacks', 'cashbacks', 'refer&earn']);
 
     const [showFilters, setShowFilters] = useState(false);
+
+    const [showTransactionDropdown, setShowTransactionDropdown] = useState(false);
+    const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
 
     const handleTransactionTypeChange = (option: string) => {
         if (selectedTransactionTypes.includes(option)) {
@@ -69,7 +73,7 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
                             <button>Today</button>
                             <button>Last 7 days</button>
                             <button>This month</button>
-                            {/* <button>Last 3 months</button> */}
+                            <button>Last 3 months</button>
                         </div>
                         <div className="filter__container">
                             <div className="filter__container__item">
@@ -86,26 +90,34 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
                             <div className="filter__container__item">
                                 <p>Transaction Type</p>
                                 <div className="filter__container__item__options">
-                                    <div className="dropdown">
-                                        <button className="dropbtn">{selectedTransactionTypes.join(', ')}</button>
-                                        <div className="dropdown-content">
-                                            <label><input type="checkbox" checked={selectedTransactionTypes.includes('store transactions')} onChange={() => handleTransactionTypeChange('store transactions')} /> Store Transactions</label>
-                                            <label><input type="checkbox" checked={selectedTransactionTypes.includes('get tipped')} onChange={() => handleTransactionTypeChange('get tipped')} /> Get Tipped</label>
-                                            <label><input type="checkbox" checked={selectedTransactionTypes.includes('withdrawals')} onChange={() => handleTransactionTypeChange('withdrawals')} /> Withdrawals</label>
-                                        </div>
+                                    <div className="dropdown" onMouseLeave={() => setShowTransactionDropdown(false)}>
+                                        <Text noOfLines={1} className="dropbtn" onClick={() => setShowTransactionDropdown(!showTransactionDropdown)}>{selectedTransactionTypes.join(', ')}</Text>
+                                        {
+                                            showTransactionDropdown && <div className="dropdown-content">
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('store transactions')} onChange={() => handleTransactionTypeChange('store transactions')} /> Store Transactions</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('get tipped')} onChange={() => handleTransactionTypeChange('get tipped')} /> Get Tipped</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('withdrawals')} onChange={() => handleTransactionTypeChange('withdrawals')} /> Withdrawals</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('chargebacks')} onChange={() => handleTransactionTypeChange('chargebacks')} /> Chargebacks</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('cashbacks')} onChange={() => handleTransactionTypeChange('cashbacks')} /> Cashbacks</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('refer&earn')} onChange={() => handleTransactionTypeChange('refer&earn')} /> Refer & Earn</label>
+
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
                             <div className="filter__container__item">
-                                <p>Transaction Status</p>
+                                <p className="status">Transaction Status</p>
                                 <div className="filter__container__item__options">
-                                    <div className="dropdown">
-                                        <button className="dropbtn">{selectedOptions.join(', ')}</button>
-                                        <div className="dropdown-content">
-                                            <label><input type="checkbox" checked={selectedOptions.includes('successful')} onChange={() => handleCheckboxChange('successful')} /> Successful</label>
-                                            <label><input type="checkbox" checked={selectedOptions.includes('pending')} onChange={() => handleCheckboxChange('pending')} /> Pending</label>
-                                            <label><input type="checkbox" checked={selectedOptions.includes('failed')} onChange={() => handleCheckboxChange('failed')} /> Failed</label>
-                                        </div>
+                                    <div className="dropdown" onMouseLeave={() => setShowOptionsDropdown(false)}>
+                                        <Text className="dropbtn" noOfLines={1} onClick={() => setShowOptionsDropdown(!showOptionsDropdown)}>{selectedOptions.join(', ')}</Text>
+                                        {
+                                            showOptionsDropdown && <div className="dropdown-content">
+                                                <label><input type="checkbox" checked={selectedOptions.includes('successful')} onChange={() => handleCheckboxChange('successful')} /> Successful</label>
+                                                <label><input type="checkbox" checked={selectedOptions.includes('pending')} onChange={() => handleCheckboxChange('pending')} /> Pending</label>
+                                                <label><input type="checkbox" checked={selectedOptions.includes('failed')} onChange={() => handleCheckboxChange('failed')} /> Failed</label>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
