@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getWallet } from "../lib/actions";
 import type { Wallet } from "../lib/definitions";
 import { useEffect, useState } from "react";
+import { formatCurrency } from "@/utils/number";
 
 export function Wallet() {
     const [balances, setBalances] = useState<Wallet>();
@@ -15,6 +16,7 @@ export function Wallet() {
     }, [])
     // const balances = await getWallet();
     // console.log(balances)
+    if (!balances) return;
     return (
         <div className="transactions-summary">
             <div className="transactions-summary__item">
@@ -30,7 +32,7 @@ export function Wallet() {
                         />
                     </div>
                 </div>
-                <p className="transactions-summary__item-value">USD {balances?.balance}</p>
+                <p className="transactions-summary__item-value">{formatCurrency(balances?.balance)}</p>
             </div>
 
             <div className="transactions-summary__item">
@@ -46,7 +48,7 @@ export function Wallet() {
                         />
                     </div>
                 </div>
-                <p className="transactions-summary__item-value">USD {balances?.total_payout}</p>
+                <p className="transactions-summary__item-value">{formatCurrency(balances.total_payout)}</p>
             </div>
 
             <div className="transactions-summary__item">
@@ -62,7 +64,7 @@ export function Wallet() {
                         />
                     </div>
                 </div>
-                <p className="transactions-summary__item-value">USD {balances?.total_revenue}</p>
+                <p className="transactions-summary__item-value">{formatCurrency(balances?.total_revenue)}</p>
             </div>
 
             <div className="transactions-summary__item">
@@ -79,7 +81,7 @@ export function Wallet() {
                             />
                         </div>
                     </div>
-                    <p className="transactions-summary__item-value">USD {balances?.pending_payout}</p>
+                    <p className="transactions-summary__item-value">{formatCurrency(balances?.pending_payout)}</p>
                 </div>
             </div>
         </div>
