@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
 import { Box, Text } from "@chakra-ui/react";
-import { FilterParams } from "../lib/definitions";
+import { FilterOptions, FilterParams } from "../lib/definitions";
 
 interface FilterModalProps {
     actions: FilterActions
@@ -15,11 +15,6 @@ interface FilterActions {
     isOpen: boolean;
     onClose: () => void;
     applyFilter: (options: FilterOptions) => void;
-}
-
-interface FilterOptions {
-    transactionStatus: string[];
-    transactionTypes: string[];
 }
 
 export default function FilterModal({ actions, filter, options }: FilterModalProps) {
@@ -34,8 +29,8 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
     const [showTransactionDropdown, setShowTransactionDropdown] = useState(false);
     const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
 
-    const currentDate = new Date();
-    const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+    const currentDate = options.endDate ? options.endDate : new Date();
+    const oneMonthAgo = options.startDate ? options.startDate : new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
 
     const [startDate, setStartDate] = useState<Date[]>([oneMonthAgo]);
     const [endDate, setEndDate] = useState<Date[]>([currentDate]);
@@ -98,8 +93,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
 
         filter(filters)
 
-        applyFilter({ transactionStatus: filters.selectedOptions, transactionTypes: filters.selectedTransactionTypes });
-
+        applyFilter({ transactionStatus: filters.selectedOptions, transactionTypes: filters.selectedTransactionTypes, startDate: filters.startDate[0], endDate: filters.endDate[0] });
     }
 
 

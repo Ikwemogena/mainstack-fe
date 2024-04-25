@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 import { getTransactions } from '../lib/actions';
 import { FilterOptions, FilterParams, Transaction } from '../lib/definitions';
 import FilterModal from './RevenueFilterModal';
-import { on } from 'events';
 
 function Transactions() {
     const toast = useToast();
@@ -21,6 +20,8 @@ function Transactions() {
 
     const [transactionTypes, setTransactionTypes] = useState<string[]>([]);
     const [transactionStatus, setTransactionStatus] = useState<string[]>([]);
+    const [startDate, setStartDate] = useState<Date>();
+    const [endDate, setEndDate] = useState<Date>();
 
     useEffect(() => {
         getTransactions().then((data) => {
@@ -40,7 +41,7 @@ function Transactions() {
         }
 
         const { selectedOptions, selectedTransactionTypes, startDate, endDate } = filters;
-        
+
         const filteredTransactions = transactions.filter(transaction => {
             const transactionDate = new Date(transaction.date);
             const start = new Date(startDate[0].toISOString().split('T')[0]);
@@ -72,11 +73,15 @@ function Transactions() {
     const handleFilterOptions = (options: FilterOptions) => {
         setTransactionStatus(options.transactionStatus);
         setTransactionTypes(options.transactionTypes);
+        setStartDate(options.startDate);
+        setEndDate(options.endDate);
     }
 
     const filterOptions = {
         transactionStatus,
-        transactionTypes
+        transactionTypes,
+        startDate,
+        endDate
     }
 
     return (
