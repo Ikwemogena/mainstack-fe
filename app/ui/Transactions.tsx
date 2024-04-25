@@ -40,12 +40,18 @@ function Transactions() {
         }
 
         const { selectedOptions, selectedTransactionTypes, startDate, endDate } = filters;
-
+        
         const filteredTransactions = transactions.filter(transaction => {
-            // const transactionDate = transaction.date;
+            const transactionDate = new Date(transaction.date);
+            const start = new Date(startDate[0].toISOString().split('T')[0]);
+            const end = new Date(endDate[0].toISOString().split('T')[0]);
+            end.setHours(23, 59, 59, 999);
             return selectedOptions.includes(transaction.status) &&
-                selectedTransactionTypes.includes(transaction.type)
-        })
+                selectedTransactionTypes.includes(transaction.type) &&
+                (!startDate || transactionDate >= start) &&
+                (!endDate || transactionDate <= end);
+        });
+
         setTransactions(filteredTransactions);
     }
 
