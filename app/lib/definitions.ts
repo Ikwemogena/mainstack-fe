@@ -22,3 +22,10 @@ interface Metadata {
     country: string;
     product_name?: string;
 }
+
+export interface FilterParams {
+    selectedOptions: string[];
+    selectedTransactionTypes: string[];
+    startDate: Date[];
+    endDate: Date[]
+}
