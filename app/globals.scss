@@ -107,6 +107,10 @@ body {
 .graph {
   // width: 100%;
   width: 765px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   // background-cofont
 }
 
@@ -345,10 +349,6 @@ a {
   border-radius: 100px;
 }
 
-// .slide-in {
-//   // transform: translateX(0%);
-//   animation: 3s slide-left;
-// }
 
 .filter__modal {
   position: fixed;
@@ -362,12 +362,8 @@ a {
   height: 97vh;
   border-radius: 20px;
   box-shadow: rgba(219, 222, 229, 0.08) 0px 16px 32px 12px, rgba(129, 139, 165, 0.08) 0px 12px 24px 6px;
-  // animation: 3s slide-left;
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.9s ease;
-  // margin-bottom: 10px;
-  // transition: opacity 0.3s ease;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -393,48 +389,6 @@ a {
     gap: 12px;
     flex-grow: 1;
 
-    // &-filter {
-    //   display: flex;
-    //   flex-direction: column;
-    //   gap: 8px;
-
-    //   &-title {
-    //     font-size: 14px;
-    //     font-weight: 700;
-    //     color: #131316;
-    //   }
-
-    //   &-options {
-    //     display: flex;
-    //     gap: 8px;
-    //     flex-wrap: wrap;
-
-    //     button {
-    //       padding: 8px 16px;
-    //       border: none;
-    //       border-radius: 100px;
-    //       background-color: #EFF1F6;
-    //       color: #131316;
-    //       font-weight: 600;
-    //     }
-    //   }
-    // }
-
-    // &-actions {
-    //   display: flex;
-    //   justify-content: space-between;
-    //   gap: 8px;
-
-    //   button {
-    //     padding: 8px 16px;
-    //     border: none;
-    //     border-radius: 100px;
-    //     background-color: #131316;
-    //     color: #FFFFFF;
-    //     font-weight: 600;
-    //   }
-    // }
-
     .filter__duration {
       display: flex;
       gap: 12px;
@@ -451,24 +405,12 @@ a {
 
         text-wrap: nowrap;
       }
-
-      // button {
-      //   padding: 8px 16px;
-      //   border: none;
-      //   border-radius: 100px;
-      //   background-color: #EFF1F6;
-      //   color: #131316;
-      //   font-weight: 600;
-      // }
     }
   }
 
 
   &-footer {
     padding: 10px;
-    /* Adjust as needed */
-    // backgro6nd-color: #f0f0f0;
-    /* Add background color for footer */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -570,26 +512,15 @@ a {
 }
 
 .dropbtn {
-  // padding: 14px 16px;
-  // background-color: #EFF1F6;
   border-radius: 12px;
-  // width: 100%;
-  // background-color: #3498db;
-  // color: white;
-  // padding: 8px 16px;
   text-transform: capitalize;
   font-size: 16px;
   border: none;
   cursor: pointer;
-
-  // &:hover {
-  //   border: 1px solid #131316;
-  // }
 }
 
 .dropdown-content {
   margin-top: 20px;
-  // display: none;
   position: absolute;
   padding: 8px 16px;
   display: flex;
@@ -597,12 +528,8 @@ a {
   gap: 2px;
   left: 0;
   background-color: #FFFFFF;
-  // min-width: 160px;
   width: 100%;
-  // box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 10;
-  // padding: 8px;
-  // border: 1px solid red;
   border-radius: 12px;
 
   input {
@@ -671,21 +598,13 @@ a {
   background-blend-mode: luminosity;
 
   &__item {
-    // width: 40px;
-    // height: 40px;
-    // background-image: url('/assets/icons/three-icon.svg');
-    // background-repeat: no-repeat;
-    // background-size: contain;
-    // background-position: center;
     background-blend-mode: luminosity;
     padding: 8px;
   }
 }
 
 .image-wrapper {
-  // background-blend-mode: luminosity;
   background-image: url("/assets/icons/four-icon.svg");
-  /* Replace "transparent.png" with the path to your transparent image */
   background-size: cover;
   background-blend-mode: luminosity;
   width: 24px;
@@ -694,7 +613,6 @@ a {
 
 .tool-bar__item:hover {
   background-color: rgba(255, 255, 255, 0.5);
-  /* Change to semi-transparent color on hover */
 }
 
 
@@ -704,11 +622,8 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  // background-color: rgba(0, 0, 0, 0.5);
   background-color: rgba(255, 255, 255, 0.5);
-  /* Adjust opacity as needed */
   z-index: 5;
-  /* Ensure backdrop is behind modal */
 }
 
 
@@ -727,17 +642,6 @@ a {
     align-items: center;
     padding: 8px;
     border-bottom: 1px solid #EFF1F6;
-
-    // &-avatar {
-    //   width: 40px;
-    //   height: 40px;
-    //   background-color: #EFF1F6;
-    //   border-radius: 100%;
-    //   display: flex;
-    //   justify-content: center;
-    //   align-items: center;
-    // }
-
     &-name {
       font-weight: 600;
     }
@@ -754,13 +658,9 @@ a {
 }
 
 .test {
-  // &:hover {
   transform: translateX(0%);
-  // add a delay
   opacity: 1;
-  // transition: transform 0.9s ease-in-out;
   animation: slideLeft 0.4s ease-in-out;
-  // }
 }
 
 @keyframes slideLeft {
@@ -791,11 +691,6 @@ a {
   }
 }
 
-
-
-
-// .flatpickr-current-month {
-
 .flatpickr-current-month {
 
   select {
@@ -822,5 +717,3 @@ a {
   color: #FFFFFF !important;
   border: none !important;
 }
-
-// }

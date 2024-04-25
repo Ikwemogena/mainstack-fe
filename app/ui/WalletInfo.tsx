@@ -4,20 +4,25 @@ import { getWallet } from "../lib/actions";
 import type { Wallet } from "../lib/definitions";
 import { useEffect, useState } from "react";
 import { formatCurrency } from "@/utils/number";
-import { Box, Spinner, Text } from "@chakra-ui/react";
+import { Box, Skeleton, Text } from "@chakra-ui/react";
 
 export function Wallet() {
     const [balances, setBalances] = useState<Wallet>();
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        getWallet().then((data) => {
-            setBalances(data);
-        });
-
-    }, [])
-    // const balances = await getWallet();
-    // console.log(balances)
-    if (!balances) return (<Spinner />);
+        const fetchData = async () => {
+            try {
+                const data = await getWallet();
+                setBalances(data);
+            } catch (error) {
+                console.error('Error fetching wallet data:', error);
+            } finally {
+                setIsLoaded(true);
+            }
+        };
+        fetchData();
+    }, []);
     return (
         <Box className="transactions-summary">
             <Box className="transactions-summary__item">
@@ -33,7 +38,9 @@ export function Wallet() {
                         />
                     </Box>
                 </Box>
-                <Text className="transactions-summary__item-value">{formatCurrency(balances?.balance)}</Text>
+                <Skeleton isLoaded={isLoaded}>
+                    <Text className="transactions-summary__item-value">{formatCurrency(balances?.balance ?? 0)}</Text>
+                </Skeleton>
             </Box>
 
             <Box className="transactions-summary__item">
@@ -49,7 +56,9 @@ export function Wallet() {
                         />
                     </Box>
                 </Box>
-                <p className="transactions-summary__item-value">{formatCurrency(balances.total_payout)}</p>
+                <Skeleton isLoaded={isLoaded}>
+                    <p className="transactions-summary__item-value">{formatCurrency(balances?.total_payout ?? 0)}</p>
+                </Skeleton>
             </Box>
 
             <Box className="transactions-summary__item">
@@ -65,7 +74,10 @@ export function Wallet() {
                         />
                     </Box>
                 </Box>
-                <p className="transactions-summary__item-value">{formatCurrency(balances?.total_revenue)}</p>
+
+                <Skeleton isLoaded={isLoaded}>
+                    <p className="transactions-summary__item-value">{formatCurrency(balances?.total_revenue ?? 0)}</p>
+                </Skeleton>
             </Box>
 
             <Box className="transactions-summary__item">
@@ -82,7 +94,9 @@ export function Wallet() {
                             />
                         </Box>
                     </Box>
-                    <p className="transactions-summary__item-value">{formatCurrency(balances?.pending_payout)}</p>
+                    <Skeleton isLoaded={isLoaded}>
+                        <p className="transactions-summary__item-value">{formatCurrency(balances?.pending_payout ?? 0)}</p>
+                    </Skeleton>
                 </Box>
             </Box>
         </Box>
