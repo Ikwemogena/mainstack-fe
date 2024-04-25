@@ -3,17 +3,39 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import flatpickr from "flatpickr";
 import DatePicker from "./DatePicker";
-import { Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
+import { FilterParams } from "../lib/definitions";
 
-export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+interface FilterModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    filter: (params?: FilterParams) => void; // Define the filter function type
+}
+
+export default function FilterModal({ isOpen, onClose, filter }: FilterModalProps) {
     const [selectedOptions, setSelectedOptions] = useState<string[]>(['successful', 'pending', 'failed']);
 
-    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(['store transactions', 'get tipped', 'withdrawals', 'chargebacks', 'cashbacks', 'refer&earn']);
+    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
 
     const [showFilters, setShowFilters] = useState(false);
 
     const [showTransactionDropdown, setShowTransactionDropdown] = useState(false);
     const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
+
+
+    const currentDate = new Date(); // Current date
+    const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+
+    const [startDate, setStartDate] = useState<Date[]>([oneMonthAgo]);
+    const [endDate, setEndDate] = useState<Date[]>([currentDate]);
+
+    const handleStartDate = (start: Date[]) => {
+        setStartDate(start);
+    }
+
+    const handleEndDate = (end: Date[]) => {
+        setEndDate(end);
+    }
 
     const handleTransactionTypeChange = (option: string) => {
         if (selectedTransactionTypes.includes(option)) {
@@ -23,7 +45,6 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
         }
     }
 
-    // Function to handle checkbox change
     const handleCheckboxChange = (option: string) => {
         if (selectedOptions.includes(option)) {
             setSelectedOptions(selectedOptions.filter(item => item !== option));
@@ -49,15 +70,35 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
         setTimeout(() => onClose(), 300);
     }
 
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const clearFilters = () => {
+        setSelectedOptions(['successful', 'pending', 'failed']);
+        setSelectedTransactionTypes(['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
+        filter()
+    }
+
+    const applyFilters = () => {
+        // closeFilters()
+        const filters: FilterParams = {
+            selectedOptions,
+            selectedTransactionTypes,
+            startDate: startDate,
+            endDate: endDate
+        };
+
+        // console.log(filters, 'filters')
+        filter(filters)
+        // console.log(selectedDates, 'selected dateaass')
+        // filter(selectedOptions, selectedTransactionTypes, selectedDates);
+    }
+
 
 
     return (
         <>
-            {isOpen && <div className="backdrop" onClick={closeFilters}></div>}
-            {isOpen && <div className={`filter__modal ${showFilters ? ' test' : 'test-out'}`}>
-                <div>
-                    <div className="filter__modal-header">
+            {isOpen && <Box className="backdrop" onClick={closeFilters}></Box>}
+            {isOpen && <Box className={`filter__modal ${showFilters ? ' test' : 'test-out'}`}>
+                <Box>
+                    <Box className="filter__modal-header">
                         <h3>Filter</h3>
                         <Image
                             src="/assets/icons/close-icon.svg"
@@ -67,68 +108,66 @@ export default function FilterModal({ isOpen, onClose }: { isOpen: boolean, onCl
                             priority
                             onClick={() => closeFilters()}
                         />
-                    </div>
-                    <div className="filter__modal-body">
-                        <div className="filter__duration">
+                    </Box>
+                    <Box className="filter__modal-body">
+                        <Box className="filter__duration">
                             <button>Today</button>
                             <button>Last 7 days</button>
                             <button>This month</button>
                             <button>Last 3 months</button>
-                        </div>
-                        <div className="filter__container">
-                            <div className="filter__container__item">
-                                <p>Date Range</p>
-                                <div className="filter__container__item__options">
-                                    {/* <DatePicker onChange={setSelectedDate} /> */}
-                                    <select name="" id="">
-                                        <option value="All"><input type="checkbox" /> All</option>
-                                        <option value="Received">Received</option>
-                                        <option value="Sent">Sent</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="filter__container__item">
-                                <p>Transaction Type</p>
-                                <div className="filter__container__item__options">
-                                    <div className="dropdown" onMouseLeave={() => setShowTransactionDropdown(false)}>
+                        </Box>
+                        <Box className="filter__container">
+                            <Box className="filter__container__item">
+                                <p className="status">Date Range</p>
+                                <Box className="filter__container__item__options">
+                                    <Box display={'flex'} justifyContent='space-between' gap={'1rem'}>
+                                        <DatePicker onChange={handleStartDate} defaultDate={oneMonthAgo} />
+                                        <DatePicker onChange={handleEndDate} defaultDate={currentDate} />
+                                    </Box>
+                                </Box>
+                            </Box>
+                            <Box className="filter__container__item">
+                                <p className="status">Transaction Type</p>
+                                <Box className="filter__container__item__options">
+                                    <Box className="dropdown" onMouseLeave={() => setShowTransactionDropdown(false)}>
                                         <Text noOfLines={1} className="dropbtn" onClick={() => setShowTransactionDropdown(!showTransactionDropdown)}>{selectedTransactionTypes.join(', ')}</Text>
                                         {
-                                            showTransactionDropdown && <div className="dropdown-content">
+                                            showTransactionDropdown && <Box className="dropdown-content">
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('store transactions')} onChange={() => handleTransactionTypeChange('store transactions')} /> Store Transactions</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('get tipped')} onChange={() => handleTransactionTypeChange('get tipped')} /> Get Tipped</label>
-                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('withdrawals')} onChange={() => handleTransactionTypeChange('withdrawals')} /> Withdrawals</label>
-                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('chargebacks')} onChange={() => handleTransactionTypeChange('chargebacks')} /> Chargebacks</label>
-                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('cashbacks')} onChange={() => handleTransactionTypeChange('cashbacks')} /> Cashbacks</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('withdrawal')} onChange={() => handleTransactionTypeChange('withdrawal')} /> Withdrawals</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('chargeback')} onChange={() => handleTransactionTypeChange('chargeback')} /> Chargebacks</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('cashback')} onChange={() => handleTransactionTypeChange('cashback')} /> Cashbacks</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('refer&earn')} onChange={() => handleTransactionTypeChange('refer&earn')} /> Refer & Earn</label>
 
-                                            </div>
+                                            </Box>
                                         }
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="filter__container__item">
+                                    </Box>
+                                </Box>
+                            </Box>
+                            <Box className="filter__container__item">
                                 <p className="status">Transaction Status</p>
-                                <div className="filter__container__item__options">
-                                    <div className="dropdown" onMouseLeave={() => setShowOptionsDropdown(false)}>
+                                <Box className="filter__container__item__options">
+                                    <Box className="dropdown" onMouseLeave={() => setShowOptionsDropdown(false)}>
                                         <Text className="dropbtn" noOfLines={1} onClick={() => setShowOptionsDropdown(!showOptionsDropdown)}>{selectedOptions.join(', ')}</Text>
                                         {
-                                            showOptionsDropdown && <div className="dropdown-content">
+                                            showOptionsDropdown && <Box className="dropdown-content">
                                                 <label><input type="checkbox" checked={selectedOptions.includes('successful')} onChange={() => handleCheckboxChange('successful')} /> Successful</label>
                                                 <label><input type="checkbox" checked={selectedOptions.includes('pending')} onChange={() => handleCheckboxChange('pending')} /> Pending</label>
                                                 <label><input type="checkbox" checked={selectedOptions.includes('failed')} onChange={() => handleCheckboxChange('failed')} /> Failed</label>
-                                            </div>
+                                            </Box>
                                         }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="filter__modal-footer">
-                    <button className="filter-clear">Clear</button>
-                    <button className="filter-apply" onClick={() => closeFilters()}>Apply</button>
-                </div>
-            </div>}
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+                <Box className="filter__modal-footer">
+                    <button className="filter-clear" onClick={() => clearFilters()}>Clear</button>
+                    <button className="filter-apply" onClick={() => applyFilters()}>Apply</button>
+                </Box>
+            </Box>}
         </>
     )
 }
