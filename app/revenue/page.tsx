@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import RevenueChart from "@/components/Chart";
-import { Skeleton, Spinner, Text, useToast } from "@chakra-ui/react"
+import { Skeleton, Spinner, Text, Tooltip, useToast } from "@chakra-ui/react"
 import { getTransactions } from "../lib/actions";
 import { Transaction } from "../lib/definitions";
 import { Wallet } from "../ui/WalletInfo";
@@ -98,42 +98,51 @@ export default function Page() {
 function ToolBar() {
     return (
         <div className="tool-bar">
-            <div className="tool-bar__item">
-                <Image
-                    src="/assets/icons/first-icon.svg"
-                    alt="tool"
-                    width={24}
-                    height={24}
-                    priority
-                />
-            </div>
-            <div className="tool-bar__item">
-                <Image
-                    src="/assets/icons/two-icon.svg"
-                    alt="tool"
-                    width={24}
-                    height={24}
-                    priority
-                />
-            </div>
-            <div className="tool-bar__item">
-                <Image
-                    src="/assets/icons/three-icon.svg"
-                    alt="tool"
-                    width={24}
-                    height={24}
-                    priority
-                />
-            </div>
-            <div className="tool-bar__item">
-                <Image
-                    src="/assets/icons/four-icon.svg"
-                    alt="tool"
-                    width={24}
-                    height={24}
-                    priority
-                />
-            </div>
+            <Tooltip label='Link in Bio' placement='right'>
+                <div className="tool-bar__item">
+                    <Image
+                        src="/assets/icons/first-icon.svg"
+                        alt="Link in Bio"
+                        width={24}
+                        height={24}
+                        priority
+                    />
+                </div>
+            </Tooltip>
+            <Tooltip label='Store' placement='right'>
+                <div className="tool-bar__item">
+                    <Image
+                        src="/assets/icons/two-icon.svg"
+                        alt="Store"
+                        width={24}
+                        height={24}
+                        priority
+                    />
+                </div>
+            </Tooltip>
+
+            <Tooltip label='Media Kit' placement='right'>
+                <div className="tool-bar__item">
+                    <Image
+                        src="/assets/icons/three-icon.svg"
+                        alt="Media Kit"
+                        width={24}
+                        height={24}
+                        priority
+                    />
+                </div>
+            </Tooltip>
+            <Tooltip label='Invoicing' placement='right'>
+                <div className="tool-bar__item">
+                    <Image
+                        src="/assets/icons/four-icon.svg"
+                        alt="Invoicing"
+                        width={24}
+                        height={24}
+                        priority
+                    />
+                </div>
+            </Tooltip>
         </div>
     )
 }
