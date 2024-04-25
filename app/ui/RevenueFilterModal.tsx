@@ -35,12 +35,16 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
     const [startDate, setStartDate] = useState<Date[]>([oneMonthAgo]);
     const [endDate, setEndDate] = useState<Date[]>([currentDate]);
 
+    const [hasChanges, setHasChanges] = useState(false);
+
     const handleStartDate = (start: Date[]) => {
         setStartDate(start);
+        setHasChanges(true);
     }
 
     const handleEndDate = (end: Date[]) => {
         setEndDate(end);
+        setHasChanges(true);
     }
 
     const handleTransactionTypeChange = (option: string) => {
@@ -49,6 +53,8 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
         } else {
             setSelectedTransactionTypes([...selectedTransactionTypes, option]);
         }
+
+        setHasChanges(true);
     }
 
     const handleCheckboxChange = (option: string) => {
@@ -57,6 +63,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
         } else {
             setSelectedOptions([...selectedOptions, option]);
         }
+        setHasChanges(true);
     };
 
     useEffect(() => {
@@ -94,6 +101,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
         filter(filters)
 
         applyFilter({ transactionStatus: filters.selectedOptions, transactionTypes: filters.selectedTransactionTypes, startDate: filters.startDate[0], endDate: filters.endDate[0] });
+        setHasChanges(false);
     }
 
 
@@ -173,7 +181,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
                 </Box>
                 <Box className="filter__modal-footer">
                     <button className="filter-clear" onClick={() => clearFilters()}>Clear</button>
-                    <button className="filter-apply" onClick={() => applyFilters()}>Apply</button>
+                    <button className="filter-apply" onClick={() => applyFilters()} disabled={!hasChanges}>Apply</button>
                 </Box>
             </Box>}
         </>
