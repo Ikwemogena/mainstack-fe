@@ -106,7 +106,7 @@ function Transactions() {
                         <button className="revenue__transactions__heading-actions-filter" onClick={() =>
                             toast({
                                 title: 'No Action.',
-                                status: 'success',
+                                status: 'warning',
                                 duration: 3000,
                             })
                         }>
