@@ -123,7 +123,6 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
         <>
             {isOpen && <Box className="backdrop" onClick={closeFilters}></Box>}
             {isOpen && <Box className={`filter__modal ${showFilters ? ' test' : 'test-out'}`}>
-                {/* {options} */}
                 <Box>
                     <Box className="filter__modal-header">
                         <h3>Filter</h3>
