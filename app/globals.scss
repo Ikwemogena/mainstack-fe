@@ -586,7 +586,7 @@ a {
 
 .tool-bar {
   position: fixed;
-  top: 30%;
+  top: 40%;
   left: 16px;
   border: none;
   border-radius: 100px;
@@ -642,6 +642,7 @@ a {
     align-items: center;
     padding: 8px;
     border-bottom: 1px solid #EFF1F6;
+
     &-name {
       font-weight: 600;
     }
