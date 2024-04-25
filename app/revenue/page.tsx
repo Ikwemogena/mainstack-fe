@@ -75,7 +75,7 @@ export default function Page() {
                             <button className="available-balance__withdraw"
                                 onClick={() =>
                                     toast({
-                                        title: 'No Action.age',
+                                        title: 'No Action',
                                         status: 'warning',
                                         duration: 3000,
                                     })
@@ -101,7 +101,7 @@ function ToolBar() {
             <div className="tool-bar__item">
                 <Image
                     src="/assets/icons/first-icon.svg"
-                    alt="Mainstack Logo"
+                    alt="tool"
                     width={24}
                     height={24}
                     priority
@@ -110,7 +110,7 @@ function ToolBar() {
             <div className="tool-bar__item">
                 <Image
                     src="/assets/icons/two-icon.svg"
-                    alt="Mainstack Logo"
+                    alt="tool"
                     width={24}
                     height={24}
                     priority
@@ -119,7 +119,7 @@ function ToolBar() {
             <div className="tool-bar__item">
                 <Image
                     src="/assets/icons/three-icon.svg"
-                    alt="Mainstack Logo"
+                    alt="tool"
                     width={24}
                     height={24}
                     priority
@@ -128,7 +128,7 @@ function ToolBar() {
             <div className="tool-bar__item">
                 <Image
                     src="/assets/icons/four-icon.svg"
-                    alt="Mainstack Logo"
+                    alt="tool"
                     width={24}
                     height={24}
                     priority
