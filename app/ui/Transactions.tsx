@@ -5,10 +5,12 @@ import { Box, Button, Text, useToast } from '@chakra-ui/react';
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { getTransactions } from '../lib/actions';
-import { FilterParams, Transaction } from '../lib/definitions';
+import { FilterOptions, FilterParams, Transaction } from '../lib/definitions';
 import FilterModal from './RevenueFilterModal';
+import { on } from 'events';
 
 function Transactions() {
+    const toast = useToast();
     const [filterModal, setfilterModal] = useState(false);
 
     const toggleFilterModal = () => {
@@ -17,12 +19,17 @@ function Transactions() {
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
+    const [transactionTypes, setTransactionTypes] = useState<string[]>([]);
+    const [transactionStatus, setTransactionStatus] = useState<string[]>([]);
+
     useEffect(() => {
         getTransactions().then((data) => {
             setTransactions(data);
         });
 
     }, [])
+
+    const count = transactions.length;
 
 
     const filterTransactions = (filters?: FilterParams) => {
@@ -52,11 +59,20 @@ function Transactions() {
 
     const filterActions = {
         isOpen: filterModal,
-        onClose: () => toggleFilterModal()
+        onClose: () => toggleFilterModal(),
+        applyFilter: (options: FilterOptions) => handleFilterOptions(options)
     };
 
-    const count = transactions.length;
-    const toast = useToast();
+    const handleFilterOptions = (options: FilterOptions) => {
+        setTransactionStatus(options.transactionStatus);
+        setTransactionTypes(options.transactionTypes);
+    }
+
+    const filterOptions = {
+        transactionStatus,
+        transactionTypes
+    }
+
     return (
         <>
             <div className="revenue__transactions">
@@ -122,8 +138,7 @@ function Transactions() {
                 </div>
             </div>
 
-
-            {filterModal && <FilterModal actions={filterActions} filter={filterTransactions} />}
+            {filterModal && <FilterModal actions={filterActions} filter={filterTransactions} options={filterOptions} />}
         </>
     )
 }

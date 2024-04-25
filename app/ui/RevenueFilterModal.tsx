@@ -8,25 +8,31 @@ import { FilterParams } from "../lib/definitions";
 interface FilterModalProps {
     actions: FilterActions
     filter: (params?: FilterParams) => void;
+    options: FilterOptions;
 }
 
 interface FilterActions {
     isOpen: boolean;
     onClose: () => void;
+    applyFilter: (options: FilterOptions) => void;
 }
 
-export default function FilterModal({ actions, filter }: FilterModalProps) {
+interface FilterOptions {
+    transactionStatus: string[];
+    transactionTypes: string[];
+}
 
-    const { isOpen, onClose } = actions
-    const [selectedOptions, setSelectedOptions] = useState<string[]>(['successful', 'pending', 'failed']);
+export default function FilterModal({ actions, filter, options }: FilterModalProps) {
 
-    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
+    const { isOpen, onClose, applyFilter } = actions
+    const [selectedOptions, setSelectedOptions] = useState<string[]>(options.transactionStatus.length ? options.transactionStatus : ['successful', 'pending', 'failed']);
+
+    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(options.transactionTypes.length ? options.transactionTypes : ['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
 
     const [showFilters, setShowFilters] = useState(false);
 
     const [showTransactionDropdown, setShowTransactionDropdown] = useState(false);
     const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
-
 
     const currentDate = new Date();
     const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
@@ -89,7 +95,11 @@ export default function FilterModal({ actions, filter }: FilterModalProps) {
             startDate: startDate,
             endDate: endDate
         };
+
         filter(filters)
+
+        applyFilter({ transactionStatus: filters.selectedOptions, transactionTypes: filters.selectedTransactionTypes });
+
     }
 
 
@@ -98,6 +108,7 @@ export default function FilterModal({ actions, filter }: FilterModalProps) {
         <>
             {isOpen && <Box className="backdrop" onClick={closeFilters}></Box>}
             {isOpen && <Box className={`filter__modal ${showFilters ? ' test' : 'test-out'}`}>
+                {/* {options} */}
                 <Box>
                     <Box className="filter__modal-header">
                         <h3>Filter</h3>
