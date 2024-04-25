@@ -81,14 +81,11 @@ export default function Page() {
                                     })
                                 }>Withdraw</button>
                         </div>
-                        {/* <Skeleton isLoaded={isLoaded}> */}
                         <div className="graph">
-                            {/* transactions={transactions} */}
                             {
-                                isLoaded ? <RevenueChart /> : <Spinner />
+                                isLoaded ? <RevenueChart transactions={transactions} /> : <Spinner />
                             }
                         </div>
-                        {/* </Skeleton> */}
                     </div>
                     <Wallet />
                 </div>
