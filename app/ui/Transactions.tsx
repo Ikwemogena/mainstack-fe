@@ -50,6 +50,11 @@ function Transactions() {
         });
     }
 
+    const filterActions = {
+        isOpen: filterModal,
+        onClose: () => toggleFilterModal()
+    };
+
     const count = transactions.length;
     const toast = useToast();
     return (
@@ -117,8 +122,8 @@ function Transactions() {
                 </div>
             </div>
 
-            {filterModal && <FilterModal isOpen={filterModal} onClose={toggleFilterModal} filter={filterTransactions} />
-            }
+
+            {filterModal && <FilterModal actions={filterActions} filter={filterTransactions} />}
         </>
     )
 }

@@ -1,18 +1,23 @@
 'use client'
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import flatpickr from "flatpickr";
 import DatePicker from "./DatePicker";
 import { Box, Text } from "@chakra-ui/react";
 import { FilterParams } from "../lib/definitions";
 
 interface FilterModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    filter: (params?: FilterParams) => void; // Define the filter function type
+    actions: FilterActions
+    filter: (params?: FilterParams) => void;
 }
 
-export default function FilterModal({ isOpen, onClose, filter }: FilterModalProps) {
+interface FilterActions {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export default function FilterModal({ actions, filter }: FilterModalProps) {
+
+    const { isOpen, onClose } = actions
     const [selectedOptions, setSelectedOptions] = useState<string[]>(['successful', 'pending', 'failed']);
 
     const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
@@ -23,7 +28,7 @@ export default function FilterModal({ isOpen, onClose, filter }: FilterModalProp
     const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
 
 
-    const currentDate = new Date(); // Current date
+    const currentDate = new Date();
     const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
 
     const [startDate, setStartDate] = useState<Date[]>([oneMonthAgo]);
@@ -77,18 +82,14 @@ export default function FilterModal({ isOpen, onClose, filter }: FilterModalProp
     }
 
     const applyFilters = () => {
-        // closeFilters()
+        closeFilters();
         const filters: FilterParams = {
             selectedOptions,
             selectedTransactionTypes,
             startDate: startDate,
             endDate: endDate
         };
-
-        // console.log(filters, 'filters')
         filter(filters)
-        // console.log(selectedDates, 'selected dateaass')
-        // filter(selectedOptions, selectedTransactionTypes, selectedDates);
     }
 
 
