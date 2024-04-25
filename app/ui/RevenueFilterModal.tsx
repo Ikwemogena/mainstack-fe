@@ -84,8 +84,21 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
     }
 
     const clearFilters = () => {
+        // clear options instead
+
         setSelectedOptions(['successful', 'pending', 'failed']);
         setSelectedTransactionTypes(['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
+        // setEndDate([new Date()]);
+        // setStartDate([new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate())]);
+
+        // Reset startDate and endDate to default values
+        applyFilter({
+            transactionStatus: [],
+            transactionTypes: [],
+            startDate: new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate()),
+            endDate: new Date()
+        });
+
         filter()
     }
 
