@@ -75,7 +75,7 @@ export default function Page() {
                             <button className="available-balance__withdraw"
                                 onClick={() =>
                                     toast({
-                                        title: 'No Action.age',
+                                        title: 'No Action',
                                         status: 'warning',
                                         duration: 3000,
                                     })
