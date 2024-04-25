@@ -1,7 +1,7 @@
 'use client'
 import { formatDate } from '@/utils/date'
 import { formatCurrency } from '@/utils/number'
-import { Box, Button, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Skeleton, Text, useToast } from '@chakra-ui/react';
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { getTransactions } from '../lib/actions';
@@ -11,6 +11,7 @@ import FilterModal from './RevenueFilterModal';
 function Transactions() {
     const toast = useToast();
     const [filterModal, setfilterModal] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const toggleFilterModal = () => {
         setfilterModal(filterModal => !filterModal);
@@ -23,11 +24,20 @@ function Transactions() {
     const [startDate, setStartDate] = useState<Date>();
     const [endDate, setEndDate] = useState<Date>();
 
-    useEffect(() => {
-        getTransactions().then((data) => {
-            setTransactions(data);
-        });
 
+    const fetchData = async () => {
+        try {
+            const data = await getTransactions();
+            setTransactions(data);
+        } catch (error) {
+            console.error('Error fetching transactions:', error);
+        } finally {
+            setIsLoaded(true);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
     }, [])
 
     const count = transactions.length;
@@ -59,9 +69,7 @@ function Transactions() {
 
 
     const resetFilters = () => {
-        getTransactions().then((data) => {
-            setTransactions(data);
-        });
+        fetchData()
     }
 
     const filterActions = {
@@ -88,10 +96,12 @@ function Transactions() {
         <>
             <div className="revenue__transactions">
                 <div className="revenue__transactions__heading">
-                    <div className="revenue__transactions__heading-title">
-                        <h2>{count} Transactions</h2>
-                        <p>Your transactions for All Time</p>
-                    </div>
+                    <Skeleton isLoaded={isLoaded}>
+                        <div className="revenue__transactions__heading-title">
+                            <h2>{count} Transactions</h2>
+                            <p>Your transactions for All Time</p>
+                        </div>
+                    </Skeleton>
                     <div className="revenue__transactions__heading-actions">
                         <button className="revenue__transactions__heading-actions-filter" onClick={() => { toggleFilterModal() }}>
                             Filter
@@ -122,30 +132,26 @@ function Transactions() {
                     </div>
                 </div>
                 <div className="revenue__transactions-list">
-                    {transactions.length > 0 ? transactions.map((transaction, index) => (
+                    {isLoaded && transactions.length && transactions.map((transaction, index) => (
                         <div key={index} className="transaction">
                             <div className="transaction__details">
                                 <ImageHandler status={transaction.type as TransactionType} />
 
-                                <div className="transaction__details-info">
-                                    <p className="transaction__details-desc">{transaction.metadata?.product_name ? transaction.metadata?.product_name : 'cash withdrawal'}</p>
-                                    <p className="transaction__details-owner" style={transaction.status === 'successful' && !transaction.metadata?.name ? { color: '#0EA163' } : {}}>{transaction.metadata?.name ? transaction.metadata?.name : transaction.status}</p>
-                                </div>
+                                <Skeleton isLoaded={isLoaded}>
+                                    <div className="transaction__details-info">
+                                        <p className="transaction__details-desc">{transaction.metadata?.product_name ? transaction.metadata?.product_name : 'cash withdrawal'}</p>
+                                        <p className="transaction__details-owner" style={transaction.status === 'successful' && !transaction.metadata?.name ? { color: '#0EA163' } : {}}>{transaction.metadata?.name ? transaction.metadata?.name : transaction.status}</p>
+                                    </div>
+                                </Skeleton>
                             </div>
                             <div className="transaction__amount-details">
-                                <p className="transaction__amount-details-price">{formatCurrency(transaction.amount)}</p>
-                                <p className="transaction__amount-details-date">{formatDate(transaction.date)}</p>
+                                <Skeleton isLoaded={isLoaded}>
+                                    <p className="transaction__amount-details-price">{formatCurrency(transaction.amount)}</p>
+                                    <p className="transaction__amount-details-date">{formatDate(transaction.date)}</p>
+                                </Skeleton>
                             </div>
                         </div>
-                    )) : <Box display='flex' flexDirection={'column'} justifyContent={'center'} alignItems={'center'} paddingTop='2rem' className="no-transactions">
-                        <Box display='flex' flexDirection={'column'} justifyContent={'center'}>
-                            <Box>
-                                <Text as='b' fontSize='3xl'>No matching transaction found for the selected filter</Text>
-                                <Text>Change your filters to see more results, or add a new product.</Text>
-                            </Box>
-                            <Button colorScheme='blue'>Button</Button>
-                        </Box>
-                    </Box>}
+                    ))}
                 </div>
             </div>
 

@@ -2,9 +2,8 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
-import { formatDate } from "@/utils/date";
 import RevenueChart from "@/components/Chart";
-import { Text, useToast } from "@chakra-ui/react"
+import { Skeleton, Spinner, Text, useToast } from "@chakra-ui/react"
 import { getTransactions } from "../lib/actions";
 import { Transaction } from "../lib/definitions";
 import { Wallet } from "../ui/WalletInfo";
@@ -13,15 +12,28 @@ import { formatCurrency } from "@/utils/number";
 
 export default function Page() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [filterTypes, setFilterTypes] = useState<string[]>([]);
-    const [filterStatus, setFilterStatus] = useState<string[]>([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        getTransactions().then((data) => {
-            setTransactions(data);
-        });
+        const fetchData = async () => {
+            try {
+                const data = await getTransactions();
+                setTransactions(data);
+            } catch (error) {
+                console.error('Error fetching transactions:', error);
+            } finally {
+                setIsLoaded(true);
+            }
+        };
+        fetchData();
+    }, []);
 
-    }, [])
+    // useEffect(() => {
+    //     getTransactions().then((data) => {
+    //         setTransactions(data);
+    //     });
+
+    // }, [])
 
     const toast = useToast();
 
@@ -56,19 +68,23 @@ export default function Page() {
                         <div className="available-balance">
                             <div className="available-balance__amount">
                                 <p className="available-balance__header">Available Balance</p>
-                                {availableBalance && <p className="available-balance__cost">{formatCurrency(availableBalance)}</p>}
+                                <Skeleton isLoaded={isLoaded}>
+                                    <p className="available-balance__cost">{formatCurrency(availableBalance as number)}</p>
+                                </Skeleton>
                             </div>
                             <button className="available-balance__withdraw"
                                 onClick={() =>
                                     toast({
-                                        title: 'No Action.',
+                                        title: 'No Action.age',
                                         status: 'warning',
                                         duration: 3000,
                                     })
                                 }>Withdraw</button>
                         </div>
                         <div className="graph">
-                            <RevenueChart />
+                            {
+                                isLoaded ? <RevenueChart transactions={transactions} /> : <Spinner />
+                            }
                         </div>
                     </div>
                     <Wallet />

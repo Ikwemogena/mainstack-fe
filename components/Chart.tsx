@@ -1,7 +1,8 @@
+import { Transaction } from '@/app/lib/definitions';
 import Chart from 'chart.js/auto';
 import { useEffect, useRef } from 'react';
 
-const RevenueChart = () => {
+const RevenueChart = ({ transactions }: { transactions: Transaction[] }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
@@ -10,17 +11,41 @@ const RevenueChart = () => {
         const ctx = chartRef.current.getContext('2d');
         if (!ctx) return;
 
+        // real data
+        // const dataByMonth: Record<string, number> = {};
+        // transactions.forEach(transaction => {
+        //     const date = new Date(transaction.date);
+        //     const year = date.getFullYear();
+        //     const month = date.getMonth();
+
+        //     const key = `${year}-${month}`;
+        //     const revenue = dataByMonth[key] || 100;
+        //     dataByMonth[key] = revenue + transaction.amount;
+        // });
+
+        // const labels = Object.keys(dataByMonth).map(key => {
+        //     const [year, month] = key.split('-');
+        //     return new Date(parseInt(year), parseInt(month), 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+        // });
+        // const data = Object.values(dataByMonth);
+
+        // to demonstrate curveness
+        const data = Array.from({ length: 12 }, () => Math.floor(Math.random() * 1000));
+
+        const labels = Array.from({ length: 12 }, (_, i) => {
+            return new Date(2022, i, 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+        })
+
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['january', 'february', 'march', 'april', 'may', 'june', 'july'],
+                labels: labels,
                 datasets: [{
-                    label: 'My First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 10],
+                    label: 'Total Revenue',
+                    data: data,
                     tension: 0.4,
                     borderColor: '#FF5403',
-                    pointRadius: 0,
-                    // pointHoverRadius: 0, 
+                    pointRadius: 0
                 }],
             },
             options: {
