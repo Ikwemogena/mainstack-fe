@@ -555,6 +555,18 @@ a {
   &:hover {
     border: 2px solid #131316;
   }
+
+  // for calendar
+
+}
+
+.calendar {
+  input {
+    border-radius: 12px;
+    width: 100%;
+    padding: 14px 16px;
+    background-color: #EFF1F6;
+  }
 }
 
 .dropbtn {

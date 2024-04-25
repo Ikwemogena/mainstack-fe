@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 import { getTransactions } from '../lib/actions';
 import { FilterOptions, FilterParams, Transaction } from '../lib/definitions';
 import FilterModal from './RevenueFilterModal';
-import { on } from 'events';
 
 function Transactions() {
     const toast = useToast();
@@ -21,6 +20,8 @@ function Transactions() {
 
     const [transactionTypes, setTransactionTypes] = useState<string[]>([]);
     const [transactionStatus, setTransactionStatus] = useState<string[]>([]);
+    const [startDate, setStartDate] = useState<Date>();
+    const [endDate, setEndDate] = useState<Date>();
 
     useEffect(() => {
         getTransactions().then((data) => {
@@ -42,10 +43,16 @@ function Transactions() {
         const { selectedOptions, selectedTransactionTypes, startDate, endDate } = filters;
 
         const filteredTransactions = transactions.filter(transaction => {
-            // const transactionDate = transaction.date;
+            const transactionDate = new Date(transaction.date);
+            const start = new Date(startDate[0].toISOString().split('T')[0]);
+            const end = new Date(endDate[0].toISOString().split('T')[0]);
+            end.setHours(23, 59, 59, 999);
             return selectedOptions.includes(transaction.status) &&
-                selectedTransactionTypes.includes(transaction.type)
-        })
+                selectedTransactionTypes.includes(transaction.type) &&
+                (!startDate || transactionDate >= start) &&
+                (!endDate || transactionDate <= end);
+        });
+
         setTransactions(filteredTransactions);
     }
 
@@ -66,11 +73,15 @@ function Transactions() {
     const handleFilterOptions = (options: FilterOptions) => {
         setTransactionStatus(options.transactionStatus);
         setTransactionTypes(options.transactionTypes);
+        setStartDate(options.startDate);
+        setEndDate(options.endDate);
     }
 
     const filterOptions = {
         transactionStatus,
-        transactionTypes
+        transactionTypes,
+        startDate,
+        endDate
     }
 
     return (
@@ -95,7 +106,7 @@ function Transactions() {
                         <button className="revenue__transactions__heading-actions-filter" onClick={() =>
                             toast({
                                 title: 'No Action.',
-                                status: 'success',
+                                status: 'warning',
                                 duration: 3000,
                             })
                         }>

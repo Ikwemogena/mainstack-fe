@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
 import { Box, Text } from "@chakra-ui/react";
-import { FilterParams } from "../lib/definitions";
+import { FilterOptions, FilterParams } from "../lib/definitions";
 
 interface FilterModalProps {
     actions: FilterActions
@@ -17,35 +17,34 @@ interface FilterActions {
     applyFilter: (options: FilterOptions) => void;
 }
 
-interface FilterOptions {
-    transactionStatus: string[];
-    transactionTypes: string[];
-}
-
 export default function FilterModal({ actions, filter, options }: FilterModalProps) {
 
     const { isOpen, onClose, applyFilter } = actions
     const [selectedOptions, setSelectedOptions] = useState<string[]>(options.transactionStatus.length ? options.transactionStatus : ['successful', 'pending', 'failed']);
 
-    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(options.transactionTypes.length ? options.transactionTypes : ['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
+    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(options.transactionTypes.length ? options.transactionTypes : ['store transactions', 'get tipped', 'deposit', 'withdrawal', 'chargeback', 'cashback', 'refer&earn',]);
 
     const [showFilters, setShowFilters] = useState(false);
 
     const [showTransactionDropdown, setShowTransactionDropdown] = useState(false);
     const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
 
-    const currentDate = new Date();
-    const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+    const currentDate = options.endDate ? options.endDate : new Date();
+    const oneMonthAgo = options.startDate ? options.startDate : new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
 
     const [startDate, setStartDate] = useState<Date[]>([oneMonthAgo]);
     const [endDate, setEndDate] = useState<Date[]>([currentDate]);
 
+    const [hasChanges, setHasChanges] = useState(false);
+
     const handleStartDate = (start: Date[]) => {
         setStartDate(start);
+        setHasChanges(true);
     }
 
     const handleEndDate = (end: Date[]) => {
         setEndDate(end);
+        setHasChanges(true);
     }
 
     const handleTransactionTypeChange = (option: string) => {
@@ -54,6 +53,8 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
         } else {
             setSelectedTransactionTypes([...selectedTransactionTypes, option]);
         }
+
+        setHasChanges(true);
     }
 
     const handleCheckboxChange = (option: string) => {
@@ -62,6 +63,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
         } else {
             setSelectedOptions([...selectedOptions, option]);
         }
+        setHasChanges(true);
     };
 
     useEffect(() => {
@@ -82,8 +84,21 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
     }
 
     const clearFilters = () => {
+        // clear options instead
+
         setSelectedOptions(['successful', 'pending', 'failed']);
         setSelectedTransactionTypes(['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
+        // setEndDate([new Date()]);
+        // setStartDate([new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate())]);
+
+        // Reset startDate and endDate to default values
+        applyFilter({
+            transactionStatus: [],
+            transactionTypes: [],
+            startDate: new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate()),
+            endDate: new Date()
+        });
+
         filter()
     }
 
@@ -98,8 +113,8 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
 
         filter(filters)
 
-        applyFilter({ transactionStatus: filters.selectedOptions, transactionTypes: filters.selectedTransactionTypes });
-
+        applyFilter({ transactionStatus: filters.selectedOptions, transactionTypes: filters.selectedTransactionTypes, startDate: filters.startDate[0], endDate: filters.endDate[0] });
+        setHasChanges(false);
     }
 
 
@@ -108,7 +123,6 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
         <>
             {isOpen && <Box className="backdrop" onClick={closeFilters}></Box>}
             {isOpen && <Box className={`filter__modal ${showFilters ? ' test' : 'test-out'}`}>
-                {/* {options} */}
                 <Box>
                     <Box className="filter__modal-header">
                         <h3>Filter</h3>
@@ -147,6 +161,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
                                             showTransactionDropdown && <Box className="dropdown-content">
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('store transactions')} onChange={() => handleTransactionTypeChange('store transactions')} /> Store Transactions</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('get tipped')} onChange={() => handleTransactionTypeChange('get tipped')} /> Get Tipped</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('deposit')} onChange={() => handleTransactionTypeChange('deposit')} /> Deposits</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('withdrawal')} onChange={() => handleTransactionTypeChange('withdrawal')} /> Withdrawals</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('chargeback')} onChange={() => handleTransactionTypeChange('chargeback')} /> Chargebacks</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('cashback')} onChange={() => handleTransactionTypeChange('cashback')} /> Cashbacks</label>
@@ -167,6 +182,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
                                                 <label><input type="checkbox" checked={selectedOptions.includes('successful')} onChange={() => handleCheckboxChange('successful')} /> Successful</label>
                                                 <label><input type="checkbox" checked={selectedOptions.includes('pending')} onChange={() => handleCheckboxChange('pending')} /> Pending</label>
                                                 <label><input type="checkbox" checked={selectedOptions.includes('failed')} onChange={() => handleCheckboxChange('failed')} /> Failed</label>
+
                                             </Box>
                                         }
                                     </Box>
@@ -177,7 +193,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
                 </Box>
                 <Box className="filter__modal-footer">
                     <button className="filter-clear" onClick={() => clearFilters()}>Clear</button>
-                    <button className="filter-apply" onClick={() => applyFilters()}>Apply</button>
+                    <button className="filter-apply" onClick={() => applyFilters()} disabled={!hasChanges}>Apply</button>
                 </Box>
             </Box>}
         </>

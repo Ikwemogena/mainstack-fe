@@ -44,7 +44,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ onChange, defaultDate }) => {
     }, [])
 
     return (
-        <div className="dropdown">
+        <div className="calendar">
             <input ref={datePickerRef} type="text" placeholder="Select date..." />
         </div>
     )

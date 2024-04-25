@@ -33,4 +33,6 @@ export interface FilterParams {
 export interface FilterOptions {
     transactionStatus: string[];
     transactionTypes: string[];
+    startDate?: Date;
+    endDate?: Date;
 }
