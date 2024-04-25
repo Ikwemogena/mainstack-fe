@@ -86,6 +86,7 @@ body {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      cursor: pointer;
 
       &-profile {
         // padding: 0.2 0.5rem;
@@ -336,7 +337,7 @@ a {
   // flex-direction: column;
 }
 
-.active {
+.active-route {
   background-color: #131316;
   font-weight: 700;
   color: #FFFFFF;
@@ -358,12 +359,13 @@ a {
   color: #131316;
   width: 456px;
   z-index: 10;
-  height: 96vh;
+  height: 97vh;
   border-radius: 20px;
   box-shadow: rgba(219, 222, 229, 0.08) 0px 16px 32px 12px, rgba(129, 139, 165, 0.08) 0px 12px 24px 6px;
   // animation: 3s slide-left;
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.9s ease;
+  // margin-bottom: 10px;
   // transition: opacity 0.3s ease;
 
   display: flex;
@@ -371,7 +373,7 @@ a {
   justify-content: space-between;
 
   &-header {
-    padding: 24px 20px;
+    padding: 20px 24px;
     display: flex;
     justify-content: space-between;
 
@@ -388,7 +390,7 @@ a {
     padding: 15px 24px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
     flex-grow: 1;
 
     // &-filter {
@@ -483,6 +485,12 @@ a {
     .filter-apply {
       background-color: #131316;
       color: #FFFFFF;
+
+      &:disabled {
+        background-color: #EFF1F6;
+        color: #131316;
+        cursor: not-allowed;
+      }
     }
 
     .filter-clear {
@@ -509,7 +517,7 @@ a {
     flex-direction: column;
     gap: 12px;
 
-    p {
+    .status {
       font-weight: 600;
     }
 
@@ -569,9 +577,12 @@ a {
 
 .dropdown-content {
   margin-top: 20px;
-  display: none;
+  // display: none;
   position: absolute;
   padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   left: 0;
   background-color: #FFFFFF;
   // min-width: 160px;
@@ -601,8 +612,9 @@ a {
   font-weight: 600;
   color: #131316;
   display: flex;
-  gap: 12px;
+  // gap: 12px;
   align-items: center;
+  padding: 14px;
   // margin-bottom: 8px;
 }
 
@@ -614,7 +626,7 @@ a {
   align-items: center;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdownx:hover .dropdown-content {
   display: flex;
   flex-direction: column;
   // border: 1px solid #131316;
@@ -766,3 +778,37 @@ a {
     transform: translateX(100%);
   }
 }
+
+
+
+
+// .flatpickr-current-month {
+
+.flatpickr-current-month {
+
+  select {
+    /* for Firefox */
+    -moz-appearance: none !important;
+    /* for Chrome */
+    -webkit-appearance: none !important;
+    width: 38px;
+  }
+
+  /* For IE10 */
+  select::-ms-expand {
+    display: none !important;
+  }
+}
+
+.flatpickr-day {
+  // font-weight: 600 !important;
+  // color: #131316 !important;
+}
+
+.flatpickr-day.selected {
+  background-color: #131316 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+}
+
+// }
