@@ -27,7 +27,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
     const { isOpen, onClose, applyFilter } = actions
     const [selectedOptions, setSelectedOptions] = useState<string[]>(options.transactionStatus.length ? options.transactionStatus : ['successful', 'pending', 'failed']);
 
-    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(options.transactionTypes.length ? options.transactionTypes : ['store transactions', 'get tipped', 'withdrawal', 'chargeback', 'cashback', 'refer&earn']);
+    const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<string[]>(options.transactionTypes.length ? options.transactionTypes : ['store transactions', 'get tipped', 'deposit', 'withdrawal', 'chargeback', 'cashback', 'refer&earn',]);
 
     const [showFilters, setShowFilters] = useState(false);
 
@@ -147,6 +147,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
                                             showTransactionDropdown && <Box className="dropdown-content">
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('store transactions')} onChange={() => handleTransactionTypeChange('store transactions')} /> Store Transactions</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('get tipped')} onChange={() => handleTransactionTypeChange('get tipped')} /> Get Tipped</label>
+                                                <label><input type="checkbox" checked={selectedTransactionTypes.includes('deposit')} onChange={() => handleTransactionTypeChange('deposit')} /> Deposits</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('withdrawal')} onChange={() => handleTransactionTypeChange('withdrawal')} /> Withdrawals</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('chargeback')} onChange={() => handleTransactionTypeChange('chargeback')} /> Chargebacks</label>
                                                 <label><input type="checkbox" checked={selectedTransactionTypes.includes('cashback')} onChange={() => handleTransactionTypeChange('cashback')} /> Cashbacks</label>
@@ -167,6 +168,7 @@ export default function FilterModal({ actions, filter, options }: FilterModalPro
                                                 <label><input type="checkbox" checked={selectedOptions.includes('successful')} onChange={() => handleCheckboxChange('successful')} /> Successful</label>
                                                 <label><input type="checkbox" checked={selectedOptions.includes('pending')} onChange={() => handleCheckboxChange('pending')} /> Pending</label>
                                                 <label><input type="checkbox" checked={selectedOptions.includes('failed')} onChange={() => handleCheckboxChange('failed')} /> Failed</label>
+
                                             </Box>
                                         }
                                     </Box>
