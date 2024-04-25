@@ -21,7 +21,7 @@ export default function Header() {
                 <nav className="header__nav">
                     <ul className="header__nav-list">
                         <li>
-                            <Link href="/" className={currentPath === '/' ? 'active' : ''}>
+                            <Link href=''>
                                 <Image
                                     src="/assets/icons/home-icon.svg"
                                     alt="Mainstack Logo"
@@ -32,14 +32,14 @@ export default function Header() {
                                 Home
                             </Link>
                         </li>
-                        <li><Link href="/"> <Image
+                        <li><Link href=''> <Image
                             src="/assets/icons/analytics-icon.svg"
                             alt="Mainstack Logo"
                             width={20}
                             height={20}
                             priority
                         />Analytics</Link></li>
-                        <li><Link href="/revenue" className={currentPath === '/revenue' ? 'active' : ''}>
+                        <li><Link href="/revenue" className={currentPath === '/revenue' ? 'active-route' : ''}>
                             <Image
                                 src="/assets/icons/payments-icon.svg"
                                 alt="Revenue Icon"
@@ -47,14 +47,14 @@ export default function Header() {
                                 height={20}
                                 priority
                             />Revenue</Link></li>
-                        <li><Link href="/"><Image
+                        <li><Link href=""><Image
                             src="/assets/icons/crm-icon.svg"
                             alt="CRM Icon"
                             width={20}
                             height={20}
                             priority
                         />CRM</Link></li>
-                        <li><Link href="/"><Image
+                        <li><Link href=""><Image
                             src="/assets/icons/apps-icon.svg"
                             alt="Mainstack Logo"
                             width={20}
