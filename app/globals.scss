@@ -551,10 +551,8 @@ a {
   font-weight: 600;
   color: #131316;
   display: flex;
-  // gap: 12px;
   align-items: center;
   padding: 14px;
-  // margin-bottom: 8px;
 }
 
 .dropdown-content input {
@@ -604,15 +602,14 @@ a {
     &:hover {
       background-color: #EFF1F6;
       border-radius: 100%;
+
+      img {
+        mix-blend-mode: normal;
+      }
     }
 
     img {
       mix-blend-mode: luminosity;
-
-      &:hover {
-
-        mix-blend-mode: normal;
-      }
     }
   }
 }
